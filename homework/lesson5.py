@@ -5,17 +5,20 @@
 # Входные данные - строка из чисел, разделенная пробелами.
 # Выходные данные - количество пар. Важно: 1 1 1 - это 3 пары, 1 1 1 1 - это 6 пар.
 a = [int(i) for i in input().split()]
-pairs_count = 0
-for i in range(len(a)):
-    for j in range(i + 1, len(a)):
-        if a[i] == a[j]:
-            pairs_count += 1
+num_dict = {}
+for i in a:
+    num_dict.setdefault(i, a.count(i))
+pairs_count = sum(v * (v - 1) // 2 for v in num_dict.values())
 print(pairs_count)
 
 # Уникальные элементы в списке
 # Дан список. Выведите те его элементы, которые встречаются в списке только один раз.
 # Элементы нужно выводить в том порядке, в котором они встречаются в списке.
-print(*[i for i in lst if lst.count(i) == 1])
+a = [1, 2, 1, 2, 3, 4]
+unique = {}
+for i in a:
+    unique.setdefault(i, a.count(i) == 1)
+print([k for k, v in unique.items() if v])
 
 # Упорядоченный список
 # Дан список целых чисел. Требуется переместить все ненулевые элементы в левую часть списка,
@@ -23,7 +26,8 @@ print(*[i for i in lst if lst.count(i) == 1])
 # Порядок ненулевых элементов изменять нельзя, дополнительный список использовать нельзя,
 # задачу нужно выполнить за один проход по списку.
 # Распечатайте полученный список.
-print([i for i in lst if i] + [i for i in lst if i == 0])
+lst.sort(key=lambda i: i == 0)
+print(lst)
 
 # Задачи для домашней работы
 # Создайте список ['a', 'b', 'c'] и сделайте из него кортеж.
@@ -31,7 +35,7 @@ lst = ['a', 'b', 'c']
 tpl = tuple(lst)
 
 # Создайте кортеж ('a', 'b', 'c'), И сделайте из него список.
-tpl = ('a', 'b', 'c')
+tpl = 'a', 'b', 'c'
 lst = list(tpl)
 
 # Сделайте следующие присвоения одной строкой a = 'a', b=2, c=’python’.
@@ -40,7 +44,7 @@ a, b, c = 'a', 2, 'python'
 # Создайте кортеж из одного элемента,
 # чтобы при итерировании по этому элементу последовательно выводились значения 1, 2, 3.
 # Убедитесь что len() исходного кортежа возвращает 1.
-tpl = ((1, 2, 3),)
+tpl = (1, 2, 3),
 print(len(tpl))
 for i in tpl[0]:
     print(i, end=' ')
@@ -79,17 +83,18 @@ print(a)
 # Russia
 n = int(input())
 countries = {}
-for i in range(n):
-    cities = input().split()
-    countries[cities[0]] = cities[1:]
+for _ in range(n):
+    cities_ = input().split()
+    country = cities_[0]
+    cities = cities_[1:]
+    for city in cities:
+        countries.setdefault(city, []).append(country)
 m = int(input())
 request_cities = []
-for i in range(m):
+for _ in range(m):
     request_cities.append(input())
 for request_city in request_cities:
-    for country, cities in countries.items():
-        if request_city in cities:
-            print(country)
+    print(*countries[request_city], sep='\n')
 
 # Задачи для домашней работы
 # Во входной строке записан текст.
@@ -151,11 +156,11 @@ lst[::2]
 lst = [str(i) + 'x' for i in range(1, 5)]
 
 # Одной строкой (и одним выражением) удалите элемент '2x' из прошлого списка и напечатайте его.
-lst.pop(1)
+print(lst.pop(1))
 
 # Скопируйте список и добавьте в него элемент 2x так чтобы в исходном списке этого элемента не было.
-lst1 = lst.copy()
-lst1.insert(1, '2x')
+lst1 = lst.copy() + ['2x']
+print(lst1)
 
 # Генераторы словарей
 # Создайте словарь с помощью генератора словарей,
@@ -168,9 +173,11 @@ lst1.insert(1, '2x')
 
 # Задача для домашней работы
 # Создайте генератор, который возвращает строки таблицы умножения от 0 до заданного числа.
+def get_mult_table(n):
+    for i in range(n + 1):
+        yield '\t'.join(str(i * j) for j in range(n + 1))
+
+
 n = int(input('Enter an integer: '))
-gen = ([i * j for i in range(n + 1)] for j in range(n + 1))
-for i in gen:
-    for j in i:
-        print(str(j).rjust(len(str(n ** 2))), end=' ')
-    print()
+for i in get_mult_table(n):
+    print(i)
