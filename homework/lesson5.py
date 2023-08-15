@@ -7,9 +7,8 @@
 a = [int(i) for i in input().split()]
 num_dict = {}
 for i in a:
-    num_dict.setdefault(i, a.count(i))
-pairs_count = sum(v * (v - 1) // 2 for v in num_dict.values())
-print(pairs_count)
+    num_dict[i] = num_dict.get(i, 0) + 1
+print(sum(v * (v - 1) // 2 for v in num_dict.values()))
 
 # Уникальные элементы в списке
 # Дан список. Выведите те его элементы, которые встречаются в списке только один раз.
@@ -17,8 +16,8 @@ print(pairs_count)
 a = [1, 2, 1, 2, 3, 4]
 unique = {}
 for i in a:
-    unique.setdefault(i, a.count(i) == 1)
-print([k for k, v in unique.items() if v])
+    unique[i] = unique.get(i, 0) + 1
+print([k for k, v in unique.items() if v == 1])
 
 # Упорядоченный список
 # Дан список целых чисел. Требуется переместить все ненулевые элементы в левую часть списка,
@@ -81,20 +80,13 @@ print(a)
 # Ukraine
 # Russia
 # Russia
-n = int(input())
-countries = {}
-for _ in range(n):
-    cities_ = input().split()
-    country = cities_[0]
-    cities = cities_[1:]
+cities_countries = {}
+for _ in range(int(input())):
+    country, *cities = input().split()
     for city in cities:
-        countries.setdefault(city, []).append(country)
-m = int(input())
-request_cities = []
-for _ in range(m):
-    request_cities.append(input())
-for request_city in request_cities:
-    print(*countries[request_city], sep='\n')
+        cities_countries.setdefault(city, []).append(country)
+for _ in range(int(input())):
+    print(*cities_countries[input()])
 
 # Задачи для домашней работы
 # Во входной строке записан текст.
